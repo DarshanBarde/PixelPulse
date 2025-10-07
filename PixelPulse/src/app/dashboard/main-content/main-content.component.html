@@ -1,0 +1,208 @@
+<div class="main-content">
+   Removed debug text and cleaned up structure 
+  <div class="upload-area" 
+       *ngIf="!hasModel"
+       [class.dragging]="isDragging"
+       (dragover)="onDragOver($event)"
+       (dragleave)="onDragLeave($event)"
+       (drop)="onDrop($event)">
+    <div class="upload-content">
+      <div class="upload-icon">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="64" height="64" rx="16" fill="url(#uploadGradient)" opacity="0.1"/>
+          <path d="M32 20V44M32 20L24 28M32 20L40 28" stroke="url(#uploadGradient)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 44H44" stroke="url(#uploadGradient)" stroke-width="3" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="uploadGradient" x1="0" y1="0" x2="64" y2="64">
+              <stop stop-color="#6366f1"/>
+              <stop offset="1" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h2 class="upload-title">Upload 3D Model</h2>
+      <p class="upload-description">Drag and drop your .glb or .gltf file here</p>
+      <p class="upload-or">or</p>
+      <label class="upload-button">
+        <input type="file" accept=".glb,.gltf" (change)="onFileSelected($event)" hidden>
+        Browse Files
+      </label>
+      <p class="upload-hint">Supported formats: GLB, GLTF</p>
+    </div>
+  </div>
+
+  <div class="viewer-container" *ngIf="hasModel">
+    <canvas #canvas class="viewer-canvas"></canvas>
+    
+    <div class="controls-panel">
+      <div class="controls-header">
+        <h3 class="controls-title">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 2L2 6L10 10L18 6L10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 14L10 18L18 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 10L10 14L18 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Model Editor
+        </h3>
+        <p class="model-name">{{ fileName }}</p>
+      </div>
+      
+      <div class="controls-content">
+        <div class="control-section">
+          <h4 class="section-title">Material</h4>
+          
+          <div class="control-group">
+            <label class="control-label">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8 2C8 2 11 5 11 8C11 9.65685 9.65685 11 8 11C6.34315 11 5 9.65685 5 8C5 5 8 2 8 2Z" fill="currentColor" opacity="0.3"/>
+              </svg>
+              Model Color
+            </label>
+            <input type="color" [(ngModel)]="modelColor" (change)="updateModelColor()" class="color-picker">
+          </div>
+          
+          <div class="control-group">
+            <label class="control-label">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="8" cy="8" r="2" fill="currentColor"/>
+              </svg>
+              Metalness: {{ metalness.toFixed(2) }}
+            </label>
+            <input type="range" min="0" max="1" step="0.01" [(ngModel)]="metalness" (input)="updateMaterial()" class="control-slider">
+          </div>
+          
+          <div class="control-group">
+            <label class="control-label">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M5 8H11M8 5V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              Roughness: {{ roughness.toFixed(2) }}
+            </label>
+            <input type="range" min="0" max="1" step="0.01" [(ngModel)]="roughness" (input)="updateMaterial()" class="control-slider">
+          </div>
+          
+          <div class="control-group">
+            <label class="control-label">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+                <rect x="4" y="4" width="8" height="8" rx="1" fill="currentColor" opacity="0.3"/>
+              </svg>
+              Opacity: {{ opacity.toFixed(2) }}
+            </label>
+            <input type="range" min="0" max="1" step="0.01" [(ngModel)]="opacity" (input)="updateMaterial()" class="control-slider">
+          </div>
+          
+          <div class="control-group">
+            <label class="toggle-label">
+              <input type="checkbox" [(ngModel)]="wireframe" (change)="updateMaterial()" class="toggle-checkbox">
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">Wireframe Mode</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="control-section">
+          <h4 class="section-title">Transform</h4>
+          
+          <div class="control-group">
+            <label class="control-label">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2L14 14M2 14L14 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="2" cy="2" r="1.5" fill="currentColor"/>
+                <circle cx="14" cy="14" r="1.5" fill="currentColor"/>
+              </svg>
+              Scale: {{ modelScale.toFixed(2) }}
+            </label>
+            <input type="range" min="0.1" max="3" step="0.1" [(ngModel)]="modelScale" class="control-slider">
+          </div>
+          
+          <div class="control-group">
+            <label class="control-label">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 8H14M8 2V14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              Rotation X: {{ modelRotationX }}°
+            </label>
+            <input type="range" min="-180" max="180" step="1" [(ngModel)]="modelRotationX" class="control-slider">
+          </div>
+          
+          <div class="control-group">
+            <label class="control-label">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8 2V14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              Rotation Y: {{ modelRotationY }}°
+            </label>
+            <input type="range" min="-180" max="180" step="1" [(ngModel)]="modelRotationY" class="control-slider">
+          </div>
+          
+          <div class="control-group">
+            <label class="control-label">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M2 8H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              Rotation Z: {{ modelRotationZ }}°
+            </label>
+            <input type="range" min="-180" max="180" step="1" [(ngModel)]="modelRotationZ" class="control-slider">
+          </div>
+        </div>
+        
+        <div class="control-section">
+          <h4 class="section-title">Environment</h4>
+          
+          <div class="control-group">
+            <label class="control-label">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              Background Color
+            </label>
+            <input type="color" [(ngModel)]="backgroundColor" (change)="updateBackgroundColor()" class="color-picker">
+          </div>
+        </div>
+      </div>
+      
+      <div class="controls-actions">
+        <button class="action-button action-reset" (click)="resetModel()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8C14 11.3137 11.3137 14 8 14C5.79086 14 3.83566 12.7659 2.80762 10.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M2 12V9H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Reset
+        </button>
+        <button class="action-button action-remove" (click)="removeModel()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 4H14M6 4V2H10V4M3 4L4 14H12L13 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Remove
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading 3D Model...</p>
+  </div>
+
+   Added error message display 
+  <div class="error-message" *ngIf="errorMessage">
+    <div class="error-content">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 8V12M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <p>{{ errorMessage }}</p>
+      <button class="error-close" (click)="clearError()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

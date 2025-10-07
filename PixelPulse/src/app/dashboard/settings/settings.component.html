@@ -1,0 +1,146 @@
+Creating professional settings panel UI 
+<div class="settings-overlay" (click)="closeSettings()">
+  <div class="settings-panel" (click)="$event.stopPropagation()">
+     Header 
+    <div class="settings-header">
+      <h2 class="settings-title">Settings</h2>
+      <button class="close-button" (click)="closeSettings()" aria-label="Close settings">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+     Settings Content 
+    <div class="settings-content">
+       User Profile Section 
+      <div class="settings-section">
+        <h3 class="section-title">Profile</h3>
+        <div class="profile-info">
+          <div class="profile-avatar">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="24" fill="url(#gradient)"/>
+              <path d="M24 24C27.3137 24 30 21.3137 30 18C30 14.6863 27.3137 12 24 12C20.6863 12 18 14.6863 18 18C18 21.3137 20.6863 24 24 24Z" fill="white"/>
+              <path d="M36 36C36 30.4772 30.6274 26 24 26C17.3726 26 12 30.4772 12 36" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="gradient" x1="0" y1="0" x2="48" y2="48">
+                  <stop stop-color="#6366f1"/>
+                  <stop offset="1" stop-color="#8b5cf6"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="profile-details">
+            <p class="profile-name">{{ userName }}</p>
+            <p class="profile-email">{{ userEmail }}</p>
+          </div>
+        </div>
+      </div>
+
+       Appearance Section 
+      <div class="settings-section">
+        <h3 class="section-title">Appearance</h3>
+        <div class="setting-item">
+          <div class="setting-info">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 10.5C16.8 14.8 13.2 18.3 8.9 18.1C5.3 17.9 2.4 15 2.1 11.4C1.8 7.1 5.3 3.5 9.6 3.3C10.1 3.3 10.3 3.9 10 4.3C8.6 6.2 8.5 8.9 10 11C11.5 13.1 14.2 13.7 16.5 12.8C17 12.6 17.1 13.1 17 13.5V10.5Z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <div>
+              <p class="setting-label">Dark Mode</p>
+              <p class="setting-description">Toggle dark theme</p>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" [checked]="isDarkMode" (change)="toggleTheme()">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+       3D Viewer Settings 
+      <div class="settings-section">
+        <h3 class="section-title">3D Viewer</h3>
+        
+        <div class="setting-item">
+          <div class="setting-info">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 7.5L10 2.5L17.5 7.5M2.5 12.5L10 17.5L17.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2.5 7.5V12.5M17.5 7.5V12.5M10 2.5V7.5M10 12.5V17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <p class="setting-label">Show Grid</p>
+              <p class="setting-description">Display grid helper</p>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" [(ngModel)]="showGrid">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10 6V10L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <p class="setting-label">Enable Shadows</p>
+              <p class="setting-description">Render realistic shadows</p>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" [(ngModel)]="enableShadows">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 10H17M10 3V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <div>
+              <p class="setting-label">Anti-Aliasing</p>
+              <p class="setting-description">Smooth edges</p>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" [(ngModel)]="antiAliasing">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+       General Settings 
+      <div class="settings-section">
+        <h3 class="section-title">General</h3>
+        
+        <div class="setting-item">
+          <div class="setting-info">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.5 6.66667L10 2.5L2.5 6.66667L10 10.8333L17.5 6.66667Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M2.5 13.3333L10 17.5L17.5 13.3333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2.5 10L10 14.1667L17.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <p class="setting-label">Auto Save</p>
+              <p class="setting-description">Automatically save changes</p>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" [(ngModel)]="autoSave">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+     Footer 
+    <div class="settings-footer">
+      <button class="button button-secondary" (click)="closeSettings()">Cancel</button>
+      <button class="button button-primary" (click)="saveSettings()">Save Changes</button>
+    </div>
+  </div>
+</div>

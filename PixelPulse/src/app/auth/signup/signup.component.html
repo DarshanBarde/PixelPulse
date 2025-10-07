@@ -1,0 +1,70 @@
+<div class="signup-container">
+  <h2>Create Your Account</h2>
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="signup-form">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input 
+        id="username" 
+        formControlName="username" 
+        type="text" 
+        placeholder="Enter your username" 
+        autocomplete="username"
+        [class.error]="signupForm.get('username')?.invalid && signupForm.get('username')?.touched"
+      >
+      <div class="error-message" *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched">
+        <span *ngIf="signupForm.get('username')?.errors?.['required']">Username is required</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input 
+        id="email" 
+        formControlName="email" 
+        type="email" 
+        placeholder="Enter your email" 
+        autocomplete="email"
+        [class.error]="signupForm.get('email')?.invalid && signupForm.get('email')?.touched"
+      >
+      <div class="error-message" *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+        <span *ngIf="signupForm.get('email')?.errors?.['required']">Email is required</span>
+        <span *ngIf="signupForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input 
+        id="password" 
+        formControlName="password" 
+        type="password" 
+        placeholder="Enter your password" 
+        autocomplete="new-password"
+        [class.error]="signupForm.get('password')?.invalid && signupForm.get('password')?.touched"
+      >
+      <div class="error-message" *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+        <span *ngIf="signupForm.get('password')?.errors?.['required']">Password is required</span>
+        <span *ngIf="signupForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="full_name">Full Name (Optional)</label>
+      <input 
+        id="full_name" 
+        formControlName="full_name" 
+        type="text" 
+        placeholder="Enter your full name" 
+        autocomplete="name"
+      >
+    </div>
+    <button 
+      type="submit" 
+      [disabled]="signupForm.invalid" 
+      class="signup-button"
+    >
+      Sign Up
+    </button>
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+  </form>
+  <p class="login-link">
+    Already have an account? <a routerLink="/login" class="link">Log in</a>
+  </p>
+</div>
