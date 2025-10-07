@@ -1,7 +1,7 @@
-Creating professional settings panel UI 
+
 <div class="settings-overlay" (click)="closeSettings()">
   <div class="settings-panel" (click)="$event.stopPropagation()">
-     Header 
+
     <div class="settings-header">
       <h2 class="settings-title">Settings</h2>
       <button class="close-button" (click)="closeSettings()" aria-label="Close settings">
@@ -11,7 +11,6 @@ Creating professional settings panel UI
       </button>
     </div>
 
-     Settings Content 
     <div class="settings-content">
        User Profile Section 
       <div class="settings-section">
@@ -137,7 +136,6 @@ Creating professional settings panel UI
       </div>
     </div>
 
-     Footer 
     <div class="settings-footer">
       <button class="button button-secondary" (click)="closeSettings()">Cancel</button>
       <button class="button button-primary" (click)="saveSettings()">Save Changes</button>

@@ -6,7 +6,7 @@ import { FormsModule } from "@angular/forms"
 import { SettingsComponent } from './settings/settings.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ThemeService } from '../services/theme.service';
-
+import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -15,7 +15,7 @@ import { ThemeService } from '../services/theme.service';
     SettingsComponent
   ],
   imports: [
-    CommonModule,FormsModule
+    CommonModule,FormsModule,RouterModule,
   ],
   providers: [
     ThemeService
