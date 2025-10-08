@@ -51,14 +51,14 @@ export class MainContentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private initThreeJS(): void {
     if (!this.canvasRef?.nativeElement) {
-      console.error("[v0] Canvas element not found!");
+      console.error("Canvas element not found!");
       this.errorMessage = "Failed to initialize 3D viewer.";
       this.isLoading = false;
       return;
     }
 
     const canvas = this.canvasRef.nativeElement;
-    console.log("[v0] Canvas element found, initializing Three.js scene");
+    console.log("Canvas element found, initializing Three.js scene");
 
     // Scene
     this.scene = new THREE.Scene();
@@ -107,7 +107,7 @@ export class MainContentComponent implements OnInit, AfterViewInit, OnDestroy {
     // Handle window resize
     window.addEventListener("resize", () => this.onWindowResize());
 
-    console.log("[v0] Three.js initialization complete");
+    console.log(" Three.js initialization complete");
   }
 
   private animate(): void {
@@ -191,7 +191,7 @@ export class MainContentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initThreeJS();
 
     if (!this.scene) {
-      console.error("[v0] Scene is undefined after initialization attempt");
+      console.error("Scene is undefined after initialization attempt");
       this.errorMessage = "Failed to initialize 3D viewer.";
       this.isLoading = false;
       this.hasModel = false;
@@ -213,7 +213,7 @@ export class MainContentComponent implements OnInit, AfterViewInit, OnDestroy {
         arrayBuffer,
         "",
         (gltf) => {
-          console.log("[v0] Model loaded successfully");
+          console.log("Model loaded successfully");
           if (this.currentModel) {
             this.scene.remove(this.currentModel);
           }
@@ -259,11 +259,11 @@ export class MainContentComponent implements OnInit, AfterViewInit, OnDestroy {
           this.modelRotationY = 0;
           this.modelRotationZ = 0;
 
-          console.log("[v0] Model added to scene");
+          console.log("Model added to scene");
           fileMap.forEach((url) => URL.revokeObjectURL(url)); // Clean up
         },
         (error) => {
-          console.error("[v0] Error loading model:", error);
+          console.error("Error loading model:", error);
           this.isLoading = false;
           this.hasModel = false;
           this.errorMessage = "Error loading 3D model.";
@@ -280,7 +280,7 @@ export class MainContentComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       gltfData = JSON.parse(json);
     } catch (e) {
-      console.error("[v0] Error parsing GLTF JSON:", e);
+      console.error("Error parsing GLTF JSON:", e);
       this.isLoading = false;
       this.hasModel = false;
       this.errorMessage = "Invalid .gltf file format.";
@@ -296,7 +296,7 @@ export class MainContentComponent implements OnInit, AfterViewInit, OnDestroy {
         if (fileName && fileMap.has(fileName)) {
           buffer.uri = fileMap.get(fileName);
         } else {
-          console.warn("[v0] Buffer file not found in uploaded files:", fileName);
+          console.warn("Buffer file not found in uploaded files:", fileName);
         }
       });
     }
@@ -306,7 +306,7 @@ export class MainContentComponent implements OnInit, AfterViewInit, OnDestroy {
         if (fileName && fileMap.has(fileName)) {
           image.uri = fileMap.get(fileName);
         } else {
-          console.warn("[v0] Image file not found in uploaded files:", fileName);
+          console.warn("Image file not found in uploaded files:", fileName);
         }
       });
     }
@@ -315,7 +315,7 @@ export class MainContentComponent implements OnInit, AfterViewInit, OnDestroy {
       JSON.stringify(gltfData),
       "",
       (gltf) => {
-        console.log("[v0] Model loaded successfully");
+        console.log("Model loaded successfully");
         if (this.currentModel) {
           this.scene.remove(this.currentModel);
         }
@@ -361,11 +361,11 @@ export class MainContentComponent implements OnInit, AfterViewInit, OnDestroy {
         this.modelRotationY = 0;
         this.modelRotationZ = 0;
 
-        console.log("[v0] Model added to scene");
+        console.log("Model added to scene");
         fileMap.forEach((url) => URL.revokeObjectURL(url)); // Clean up
       },
       (error) => {
-        console.error("[v0] Error loading model:", error);
+        console.error("Error loading model:", error);
         this.isLoading = false;
         this.hasModel = false;
         this.errorMessage = "Error loading 3D model. Ensure all associated files (e.g., .bin, textures) are included.";
